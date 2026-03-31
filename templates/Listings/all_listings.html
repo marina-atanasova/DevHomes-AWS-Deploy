@@ -29,9 +29,10 @@
             {% endif %}
 
             <a class="btn" href="{% url 'listings:detail' p.pk %}">Details</a>
+        {% if user.is_superuser or user == object.broker %}
             <a class="btn" href="{% url 'listings:edit' p.pk %}">Edit</a>
             <a class="btn btn-danger" href="{% url 'listings:delete' p.pk %}">Delete</a>
-
+        {% endif %}
 
         </div>
       {% endfor %}

@@ -3,89 +3,144 @@
 {% block title %}{{ object.address }} | DevHomes{% endblock %}
 
 {% block content %}
-<div class="card">
-  <h1>{{ object.address }}</h1>
+<div class="grid-2">
+  <div class="card-stack">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h1>{{ object.name }}</h1>
+          <p class="meta-line">
+            {{ object.district }}, {{ object.city }}
+          </p>
+          <p><strong>Address:</strong> {{ object.address }}</p>
+        </div>
 
-  <p><strong>District:</strong> {{ object.district }}</p>
-    <p><strong>City:</strong> {{ object.city }}</p>
+        <div>
+          {% if object.property_type %}
+            <span class="badge">{{ object.property_type }}</span>
+          {% endif %}
+        </div>
+      </div>
 
-    {% if object.broker %}
+      <hr class="divider">
+
+      <div class="row">
+        <div>
+          <p><strong>Price:</strong> {{ object.price }} EUR</p>
+          {% if object.price_per_sqm %}
+            <p><strong>Price / m²:</strong> {{ object.price_per_sqm|floatformat:2 }} EUR/m²</p>
+          {% endif %}
+        </div>
+
+        <div>
+          <p><strong>Size:</strong> {{ object.size }} m²</p>
+          {% if object.floor %}
+            <p><strong>Floor:</strong> {{ object.floor }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if object.broker %}
         <p><strong>Created by:</strong> {{ object.broker.username }}</p>
-    {% endif %}
-  <p><strong>Price:</strong> {{ object.price }} EUR</p>
+      {% endif %}
+    </div>
 
-  {% if object.price_per_sqm %}
-    <p><strong>Price / m²:</strong> {{ object.price_per_sqm|floatformat:2 }} EUR/m²</p>
-  {% endif %}
-
-  <p><strong>Size:</strong> {{ object.size }} m²</p>
     {% if object.description %}
-    <hr>
-    <p><strong>Description:</strong></p>
-    <p>{{ object.description }}</p>
-  {% endif %}
-  <p>
-    <strong>Rooms:</strong> {{ object.rooms }}
-    | <strong>Bedrooms:</strong> {{ object.bedrooms }}
-  </p>
-
-  <p>
-    <strong>Bathrooms:</strong> {{ object.bathrooms }}
-    | <strong>Balconies:</strong> {{ object.balconies }}
-  </p>
-
-  {% if object.heating %}
-    <p><strong>Heating:</strong> {{ object.heating }}</p>
-  {% endif %}
-
-  {% if object.build_year %}
-    <p><strong>Build year:</strong> {{ object.build_year }}</p>
-  {% endif %}
-
-  {% if object.build_type %}
-    <p><strong>Build type:</strong> {{ object.build_type }}</p>
-  {% endif %}
-
-  {% if object.property_type %}
-    <p><strong>Type:</strong> {{ object.property_type }}</p>
-  {% endif %}
-
-  {% if object.exposure %}
-    <p><strong>Exposure:</strong> {{ object.exposure|join:", " }}</p>
-  {% endif %}
-
-  <hr>
-
-  <p><strong>Amenities:</strong></p>
-  {% if object.amenities.exists %}
-    <ul>
-      {% for a in object.amenities.all %}
-        <li>{{ a.name }}</li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>None</p>
-  {% endif %}
-
-
-  <div style="margin-top: 18px;">
-    <a class="btn" href="{% url 'listings:all' %}">Back to all listings</a>
-    {% if user.is_authenticated and user == object.broker or user.is_superuser %}
-        <a href="{% url 'listings:edit' object.pk %}">Edit</a>
-        <a href="{% url 'listings:delete' object.pk %}">Delete</a>
+      <div class="card">
+        <h2>Description</h2>
+        <p>{{ object.description }}</p>
+      </div>
     {% endif %}
-    {% if user.is_authenticated %}
-        <form action="{% url 'listings:toggle-favorite' object.pk %}" method="post">
+
+    <div class="card">
+      <h2>Property Details</h2>
+
+      <div class="grid">
+        <div>
+          <p><strong>Rooms:</strong> {{ object.rooms }}</p>
+          <p><strong>Bedrooms:</strong> {{ object.bedrooms }}</p>
+          <p><strong>Bathrooms:</strong> {{ object.bathrooms }}</p>
+          <p><strong>Balconies:</strong> {{ object.balconies }}</p>
+        </div>
+
+        <div>
+          {% if object.heating %}
+            <p><strong>Heating:</strong> {{ object.heating }}</p>
+          {% endif %}
+
+          {% if object.build_year %}
+            <p><strong>Build year:</strong> {{ object.build_year }}</p>
+          {% endif %}
+
+          {% if object.build_type %}
+            <p><strong>Build type:</strong> {{ object.build_type }}</p>
+          {% endif %}
+
+          {% if object.exposure %}
+            <p><strong>Exposure:</strong> {{ object.exposure|join:", " }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Amenities</h2>
+
+      {% if object.amenities.exists %}
+        <div class="grid">
+          {% for a in object.amenities.all %}
+            <div class="readonly-pill">{{ a.name }}</div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No amenities listed.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card-stack">
+    <div class="card">
+      <h2>Quick Summary</h2>
+      <p><strong>Type:</strong> {{ object.property_type }}</p>
+      <p><strong>District:</strong> {{ object.district }}</p>
+      <p><strong>City:</strong> {{ object.city }}</p>
+      <p><strong>Size:</strong> {{ object.size }} m²</p>
+      <p><strong>Price:</strong> {{ object.price }} EUR</p>
+
+      {% if object.price_per_sqm %}
+        <p><strong>Price / m²:</strong> {{ object.price_per_sqm|floatformat:2 }} EUR/m²</p>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h2>Actions</h2>
+
+      <div class="actions">
+        <a class="btn" href="{% url 'listings:all' %}">Back to all listings</a>
+      </div>
+
+      {% if user.is_authenticated %}
+        <div class="actions">
+          <form action="{% url 'listings:toggle-favorite' object.pk %}" method="post">
             {% csrf_token %}
             <button class="btn" type="submit">
-                {% if object in user.favorite_properties.all %}
-                    Remove from favorites
-                {% else %}
-                    Add to favorites
-                {% endif %}
+              {% if object in user.favorite_properties.all %}
+                Remove from favorites
+              {% else %}
+                Add to favorites
+              {% endif %}
             </button>
-        </form>
-    {% endif %}
+          </form>
+        </div>
+      {% endif %}
+
+      {% if user.is_superuser or user == object.broker %}
+        <div class="actions">
+          <a class="btn btn-dark" href="{% url 'listings:edit' object.pk %}">Edit</a>
+          <a class="btn btn-danger" href="{% url 'listings:delete' object.pk %}">Delete</a>
+        </div>
+      {% endif %}
+    </div>
   </div>
 </div>
 {% endblock %}

@@ -1,3 +1,4 @@
+from django.db.models.functions import Round
 from django.shortcuts import render
 from django.db.models import Count, Avg
 from Listings.models import Property
@@ -38,8 +39,8 @@ def home(request):
     )
 
     credit_stats = CreditRequest.objects.aggregate(
-        avg_credit_requested=Avg("property_price"),
-        avg_credit_years=Avg("repayment_years"),
+        avg_credit_requested=Round(Avg("property_price"), 2),
+        avg_credit_years=Round(Avg("repayment_years"), 2),
     )
 
     context = {

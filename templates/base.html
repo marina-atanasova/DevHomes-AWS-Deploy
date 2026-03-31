@@ -6,48 +6,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}DevHomes{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
-    <link rel="stylesheet" href="{% static 'css/components.css' %}">
-    <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-
-
 
 <header class="navbar">
   <div class="container nav-inner">
 
-    <!-- Logo Left -->
+    <!-- Logo / Brand -->
     <a class="brand-link" href="{% url 'home' %}">
       <img class="brand-logo" src="{% static 'img/devhomes-logo.png' %}" alt="DevHomes logo">
       <span class="brand-text">DevHomes</span>
     </a>
 
-    <!-- Navigation -->
-    <nav class="nav-links">
-     <!-- Example Login Message -->
-        {% if user.is_authenticated %}
-            <p>
-                Hello, {{ user.username }} |
-                <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn">Logout</button>
-                </form>
-            </p>
-        {% else %}
-            <p>
-                <a href="{% url 'login' %}">Login</a>
-                <a href="{% url 'register' %}">Register</a>
+    <!-- Hamburger (visible only on mobile) -->
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
 
-            </p>
-        {% endif %}
+    <!-- Navigation links -->
+    <nav class="nav-links" id="navLinks">
 
-        {% if user.is_authenticated %}
-            <a href="{% url 'dashboard' %}">Dashboard</a>
-        {% endif %}
+      <!-- Auth: Login / Register  OR  Greeting + Logout -->
+      {% if user.is_authenticated %}
+        <div class="nav-user">
+          Hello, {{ user.username }}
+          <form action="{% url 'logout' %}" method="post" style="margin:0;">
+            {% csrf_token %}
+            <button type="submit" class="btn" style="padding:7px 12px;font-size:13px;">Logout</button>
+          </form>
+        </div>
+      {% else %}
+        <div class="nav-auth">
+          <a class="nav-auth-link" href="{% url 'login' %}">Login</a>
+          <a class="nav-auth-link is-primary" href="{% url 'register' %}">Register</a>
+        </div>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+      {% endif %}
+
       <a class="nav-link" href="{% url 'home' %}">Home</a>
 
       <!-- Listings Dropdown -->
@@ -58,16 +64,15 @@
           <a href="{% url 'listings:search' %}">Search Listings</a>
           {% if user.is_authenticated %}
             {% if user.role == "broker" or user.is_superuser %}
-            <a href="{% url 'listings:add' %}">Add Listing</a>
+              <a href="{% url 'listings:add' %}">Add Listing</a>
               <a href="{% url 'listings:add_amenity' %}">Add Amenity</a>
-        {% endif %}
-        {% endif %}
-            <a href="{% url 'listings:all_amenities' %}">All Amenities</a>
-
+            {% endif %}
+          {% endif %}
+          <a href="{% url 'listings:all_amenities' %}">All Amenities</a>
         </div>
       </div>
 
-      <!-- Contacts Dropdown -->
+      <!-- Inquiries Dropdown -->
       <div class="nav-item dropdown">
         <span class="nav-link">Inquiries ▾</span>
         <div class="dropdown-menu">
@@ -76,27 +81,24 @@
         </div>
       </div>
 
-        <!-- Tools Dropdown -->
-        <div class="nav-item dropdown">
-          <span class="nav-link">Tools ▾</span>
-          <div class="dropdown-menu">
-            <a href="{% url 'CreditCalculator:credit' %}">Credit Calculator</a>
-            <a href="{% url 'CreditCalculator:credit_all' %}">Credit Requests</a>
-              <a href="{% url 'CreditCalculator:credit_early_repayment' %}">Early Repayment Calculator</a>
-          </div>
+      <!-- Tools Dropdown -->
+      <div class="nav-item dropdown">
+        <span class="nav-link">Tools ▾</span>
+        <div class="dropdown-menu">
+          <a href="{% url 'CreditCalculator:credit' %}">Credit Calculator</a>
+          <a href="{% url 'CreditCalculator:credit_all' %}">Credit Requests</a>
+            <a href="{% url 'CreditCalculator:credit_early_repayment' %}">Early Repayment Calculator</a>
         </div>
-    </nav>
+      </div>
 
-  </div>
-</header>
+    </nav><!-- /nav-links -->
 
-  </div>
+  </div><!-- /nav-inner -->
 </header>
 
 <main class="container">
   {% block content %}{% endblock %}
 </main>
-
 
 <footer class="site-footer">
   <div class="container footer-inner">
@@ -116,6 +118,30 @@
     </div>
   </div>
 </footer>
+
+<!-- Mobile nav toggle -->
+<script>
+  (function () {
+    const btn   = document.getElementById('navHamburger');
+    const nav   = document.getElementById('navLinks');
+
+    btn.addEventListener('click', function () {
+      const open = nav.classList.toggle('is-open');
+      btn.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open);
+    });
+
+    // Mobile dropdowns: tap to expand instead of hover
+    nav.querySelectorAll('.dropdown').forEach(function (dd) {
+      dd.querySelector('.nav-link').addEventListener('click', function (e) {
+        // Only intercept on mobile (hamburger visible)
+        if (getComputedStyle(btn).display === 'none') return;
+        e.preventDefault();
+        dd.classList.toggle('is-open');
+      });
+    });
+  })();
+</script>
 
 </body>
 </html>
