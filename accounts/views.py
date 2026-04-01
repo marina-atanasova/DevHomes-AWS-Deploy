@@ -14,7 +14,7 @@ from .models import UserInquiry
 class ContactInquiryCreateView(CreateView):
     model = UserInquiry
     form_class = ContactInquiryForm
-    template_name = "accounts/contact_form.html"
+    template_name = "Accounts/contact_form.html"
     success_url = reverse_lazy("accounts:contact-dashboard")
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -70,14 +70,14 @@ class ContactInquiryListView(ListView):
 
 class ContactInquiryDetailView(DetailView):
     model = UserInquiry
-    template_name = "accounts/contact_details.html"
+    template_name = "Accounts/contact_details.html"
 
 
 @method_decorator(login_required, name="dispatch")
 class ContactInquiryDeleteView(DeleteView):
     model = UserInquiry
 
-    template_name = "accounts/contact_delete_confirm.html"
+    template_name = "Accounts/contact_delete_confirm.html"
     success_url = reverse_lazy("accounts:contact-dashboard")
 
     def get_context_data(self, **kwargs):
