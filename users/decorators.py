@@ -20,6 +20,6 @@ def allowed_groups(allowed_groups):
             if any(group in allowed_groups for group in user_groups):
                 return view_func(request, *args, **kwargs)
 
-            return PermissionDenied
+            raise PermissionDenied
         return wrapper
     return decorator
