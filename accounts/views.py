@@ -29,8 +29,8 @@ class ContactInquiryCreateView(CreateView):
 class ContactInquiryUpdateView(UpdateView):
     model = UserInquiry
     form_class = ContactForm
-    template_name = "accounts/contact_edit.html"
-    success_url = reverse_lazy("accounts:contact-dashboard")
+    template_name = "Accounts/contact_edit.html"
+    success_url = reverse_lazy("accounts:contact_dashboard")
 
     def dispatch(self, request, *args, **kwargs):
         inquiry = self.get_object()
@@ -45,7 +45,7 @@ class ContactInquiryUpdateView(UpdateView):
 
 class ContactInquiryListView(ListView):
     model = UserInquiry
-    template_name = "accounts/contact_dashboard.html"
+    template_name = "Accounts/contact_dashboard.html"
     context_object_name = "inquiries"
     ordering = ['-created_at']
     paginate_by = 6
