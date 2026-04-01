@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import Group
 
 from users.models import User, UserRole
 
@@ -15,6 +16,27 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ("username","first_name", "last_name", "email", "phone", "role", "password1", "password2")
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+
+        user.role = self.cleaned_data["role"]
+
+
+        if user.role == UserRole.BROKER:
+            user.is_staff = True
+        else:
+            user.is_staff = False
+
+        if commit:
+            user.save()
+
+            group_name = user.get_role_display()  # "Broker" or "Customer"
+            group, created = Group.objects.get_or_create(name=group_name)
+
+            user.groups.clear()
+            user.groups.add(group)
+
+        return user
 
 class SimplePasswordResetForm(forms.Form):
     username = forms.CharField(max_length=150)

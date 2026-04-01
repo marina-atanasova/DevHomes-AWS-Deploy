@@ -10,6 +10,7 @@
     <p><strong>Name:</strong> {{ user.first_name }}</p>
     <p><strong>Surname:</strong> {{ user.last_name }}</p>
     <p><strong>Phone:</strong> {{ user.phone }}</p>
+    <p><strong>Role:</strong> {{ user.get_role_display }}</p>
 
     <div class="actions">
         <form action="{% url 'logout' %}" method="post">
