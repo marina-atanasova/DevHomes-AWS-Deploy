@@ -15,12 +15,16 @@
     <div class="actions">
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
+            <a class="btn btn-light" href="{% url 'simple_password_reset' %}">Change Password</a>
+    <a class="btn btn-accentwide" href="{% url 'edit_profile' %}">Edit Profile Information</a>
+
             <button class="btn btn-danger" type="submit">Logout</button>
         </form>
 
     </div>
-<a class="btn btn-light" href="{% url 'simple_password_reset' %}">Change Password</a>
+
 </div>
+
 
 <hr>
 
@@ -37,8 +41,8 @@
 
             <form action="{% url 'listings:toggle-favorite' listing.pk %}" method="post">
                 {% csrf_token %}
-                <button class="btn btn-danger" type="submit">
-                    Remove
+                <button class="btn btn-light" type="submit">
+                    Remove form favourites
                 </button>
             </form>
         </div>
@@ -65,9 +69,10 @@
             <a class="btn" href="{% url 'accounts:contact-detail' inquiry.pk %}">
                 View Details
             </a>
-            <a class="btn" href="{% url 'listings:detail' inquiry.listing.pk %}">
-                View Listing
-            </a>
+            <a class="btn" href="{% url 'accounts:contact-edit' inquiry.pk %}">
+                    Edit Inquiry
+                </a>
+
                 {% if user == inquiry.posted_by or user == inquiry.listing.broker or user.is_superuser %}
                     <a class="btn btn-danger" href="{% url 'accounts:contact-delete' inquiry.pk %}">
                         Delete
@@ -128,6 +133,9 @@
             <div class="actions">
                 <a class="btn" href="{% url 'listings:detail' listing.pk %}">
                     View Details
+
+                <a class="btn" href="{% url 'listings:edit' listing.pk %}">
+                        Edit Listing
                 </a>
 
                 <a class="btn btn-danger" href="{% url 'listings:delete' listing.pk %}">

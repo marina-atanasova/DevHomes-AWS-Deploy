@@ -33,6 +33,20 @@
             <a class="btn" href="{% url 'listings:edit' p.pk %}">Edit</a>
             <a class="btn btn-danger" href="{% url 'listings:delete' p.pk %}">Delete</a>
         {% endif %}
+        {% if user.is_authenticated %}
+        <div class="actions">
+          <form action="{% url 'listings:toggle-favorite' p.pk %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-accentwide" type="submit">
+              {% if object in user.favorite_properties.all %}
+                Remove from favorites
+              {% else %}
+                Add to favorites
+              {% endif %}
+            </button>
+          </form>
+        </div>
+      {% endif %}
 
         </div>
       {% endfor %}

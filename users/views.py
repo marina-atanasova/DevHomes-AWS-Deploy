@@ -1,12 +1,13 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, FormView, UpdateView
 
-from users.forms import UserRegisterForm, SimplePasswordResetForm
+from users.forms import UserRegisterForm, SimplePasswordResetForm, UserProfileEditForm
 from users.models import User
 
 
@@ -63,3 +64,13 @@ def dashboard(request):
     }
 
     return render(request, "users/dashboard.html", context)
+
+
+class ProfileEditView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = UserProfileEditForm
+    template_name = "users/edit_profile.html"
+    success_url = reverse_lazy("dashboard")
+
+    def get_object(self, queryset=None):
+        return self.request.user

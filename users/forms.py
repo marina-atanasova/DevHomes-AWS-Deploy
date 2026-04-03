@@ -64,3 +64,17 @@ class SimplePasswordResetForm(forms.Form):
             raise forms.ValidationError("Passwords do not match.")
 
         return cleaned_data
+
+class UserProfileEditForm(forms.ModelForm):
+    username = forms.CharField(disabled=True)
+    role = forms.CharField(disabled=True)
+
+    class Meta:
+        model = User
+        fields = ("username", "role", "first_name", "last_name", "email", "phone")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance:
+            self.fields["role"].initial = self.instance.get_role_display()
