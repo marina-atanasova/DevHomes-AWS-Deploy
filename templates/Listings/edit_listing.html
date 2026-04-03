@@ -4,6 +4,21 @@
 {% block content %}
 <div class="card">
 
+{% if messages %}
+  {% for message in messages %}
+    <div class="message {{ message.tags }}">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+{% if form.errors %}
+  <div class="field-errors">
+          <div class="error-message">Please correct the errors below.</div>
+        {{ form.errors }}
+  </div>
+{% endif %}
+
 {% if form.build_year.errors %}
   <div class="field-errors">
     {% for error in form.build_year.errors %}

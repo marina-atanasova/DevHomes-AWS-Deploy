@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
@@ -94,7 +95,9 @@ class EditListingView(UpdateView):
         if request.user.is_superuser or listing.broker == request.user:
             return super().dispatch(request, *args, **kwargs)
 
-        raise PermissionDenied
+        messages.error(request, "You do not have permission to edit this listing.")
+        return redirect("listings")
+
 
 @method_decorator(allowed_groups(["Broker"]), name="dispatch")
 class DeleteListingView(DeleteView):

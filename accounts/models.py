@@ -49,4 +49,6 @@ class UserInquiry(models.Model):
     closed_at = models.DateTimeField(blank=True, null=True)
 
 
+    def __str__(self):
+        return f"Credit request {self.created_at:%Y-%m-%d}"
 

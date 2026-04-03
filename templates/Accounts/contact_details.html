@@ -37,6 +37,7 @@
 
   <div class="card">
     <h2>Summary</h2>
+      <p><strong>Created by:</strong><br>{{ object.posted_by.username }}</p>
 
     <p><strong>Name:</strong><br>{{ object.first_name }} {{ object.last_name }}</p>
     <p><strong>Email:</strong><br>{{ object.email }}</p>
@@ -45,7 +46,7 @@
     <p><strong>Request type:</strong><br>{{ object.get_request_type_display }}</p>
     <p><strong>Status:</strong><br>{{ object.get_status_display }}</p>
 
-    <p><strong>Created:</strong><br>{{ object.created_at|date:"Y-m-d H:i" }}</p>
+    <p><strong>Created at:</strong><br>{{ object.created_at|date:"Y-m-d H:i" }}</p>
 
     {% if object.replied_at %}
       <p><strong>Replied at:</strong><br>{{ object.replied_at|date:"Y-m-d H:i" }}</p>
