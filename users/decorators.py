@@ -1,8 +1,10 @@
 from functools import wraps
 
+from django.contrib import messages
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
+from django.shortcuts import redirect
 
 
 def allowed_groups(allowed_groups):

@@ -30,7 +30,7 @@ class ContactInquiryUpdateView(UpdateView):
     model = UserInquiry
     form_class = ContactForm
     template_name = "Accounts/contact_edit.html"
-    success_url = reverse_lazy("accounts:contact_dashboard")
+    success_url = reverse_lazy("accounts:contact-dashboard")
 
     def dispatch(self, request, *args, **kwargs):
         inquiry = self.get_object()
