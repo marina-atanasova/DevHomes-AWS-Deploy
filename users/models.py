@@ -23,7 +23,7 @@ class User(AbstractUser):
     role = models.CharField(
         max_length=20,
         choices=UserRole.choices,
-        default=UserRole.CUSTOMER,
+        default=UserRole.BROKER,
     )
     favorite_properties = models.ManyToManyField(
         'Listings.Property',

@@ -9,7 +9,7 @@ class UserRegisterForm(UserCreationForm):
     role = forms.ChoiceField(
         choices=UserRole.choices,
         widget=forms.RadioSelect,
-        initial=UserRole.CUSTOMER,
+        initial=UserRole.BROKER,
     )
 
     class Meta(UserCreationForm.Meta):

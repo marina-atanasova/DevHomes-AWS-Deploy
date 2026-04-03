@@ -6,8 +6,6 @@ from .models import Amenity, Property
 
 
 class PropertyForm(forms.ModelForm):
-
-
     price_per_sqm = forms.DecimalField(
         label="Price per m²",
         required=False,
@@ -34,6 +32,7 @@ class PropertyForm(forms.ModelForm):
         if self.instance and self.instance.pk:
             value = self.instance.price_per_sqm
             self.fields["price_per_sqm"].initial = value
+            self.fields["broker"].disabled = True
 
     def clean_build_year(self):
         year = self.cleaned_data.get("build_year")
@@ -46,8 +45,6 @@ class PropertyForm(forms.ModelForm):
 
     def clean(self):
         cleaned = super().clean()
-
-
         address = cleaned.get("address")
         price = cleaned.get("price")
         exposure = cleaned.get("exposure")

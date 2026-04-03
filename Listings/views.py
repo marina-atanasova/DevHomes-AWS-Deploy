@@ -172,6 +172,3 @@ def toggle_favorite(request, pk):
 
     return redirect("listings:detail", pk=pk)
 
-
-from django.contrib.auth.decorators import login_required
-
