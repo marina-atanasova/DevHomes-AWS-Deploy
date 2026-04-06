@@ -1,7 +1,7 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from users.views import dashboard, RegisterView, SimplePasswordResetView, ProfileEditView
+from users.views import dashboard, RegisterView, SimplePasswordResetView, ProfileEditView, ProfileDeleteView
 
 urlpatterns = [
     path(
@@ -17,4 +17,6 @@ urlpatterns = [
 
     path("simple-reset-password/", SimplePasswordResetView.as_view(),name="simple_password_reset",),
     path("profile/edit/", ProfileEditView.as_view(), name="edit_profile"),
+    path("profile/delete/", ProfileDeleteView.as_view(), name="delete_profile"),
+
 ]

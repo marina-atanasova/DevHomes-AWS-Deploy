@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Dashboard</h1>
+<h1>My Dashboard</h1>
 
 <div class="card">
     <h2>Account</h2>
-    <p><strong>Welcome:</strong> {{ user.username }}</p>
+    <p><strong>Username:</strong> {{ user.username }}</p>
     <p><strong>Email:</strong> {{ user.email }}</p>
     <p><strong>Name:</strong> {{ user.first_name }}</p>
     <p><strong>Surname:</strong> {{ user.last_name }}</p>
@@ -19,6 +19,7 @@
     <a class="btn btn-accentwide" href="{% url 'edit_profile' %}">Edit Profile Information</a>
 
             <button class="btn btn-danger" type="submit">Logout</button>
+            <a href="{% url 'delete_profile' %}" style="background: darkred" class="btn">Delete account </a>
         </form>
 
     </div>
@@ -35,7 +36,7 @@
         <p>{{ listing.address }}</p>
 
         <div class="actions">
-            <a class="btn" href="{% url 'listings:detail' listing.pk %}">
+            <a class="btn " href="{% url 'listings:detail' listing.pk %}">
                 View Details
             </a>
 
@@ -69,7 +70,7 @@
             <a class="btn" href="{% url 'accounts:contact-detail' inquiry.pk %}">
                 View Details
             </a>
-            <a class="btn" href="{% url 'accounts:contact-edit' inquiry.pk %}">
+            <a class="btn btn-dark" href="{% url 'accounts:contact-edit' inquiry.pk %}">
                     Edit Inquiry
                 </a>
 
@@ -134,7 +135,7 @@
                 <a class="btn" href="{% url 'listings:detail' listing.pk %}">
                     View Details
                 </a>
-                <a class="btn" href="{% url 'listings:edit' listing.pk %}">
+                <a class="btn btn-dark" href="{% url 'listings:edit' listing.pk %}">
                         Edit Listing
                 </a>
                 <a class="btn btn-danger" href="{% url 'listings:delete' listing.pk %}">

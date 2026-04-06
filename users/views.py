@@ -5,7 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, FormView, UpdateView
+from django.views.generic import CreateView, FormView, UpdateView, DeleteView
 
 from users.forms import UserRegisterForm, SimplePasswordResetForm, UserProfileEditForm
 from users.models import User
@@ -74,3 +74,21 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class ProfileDeleteView(LoginRequiredMixin, DeleteView):
+    model = User
+    template_name = "users/profile_delete.html"
+    success_url = reverse_lazy("login")
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Delete Account"
+        return context
+
+    def form_valid(self, form):
+        logout(self.request)
+        return super().form_valid(form)

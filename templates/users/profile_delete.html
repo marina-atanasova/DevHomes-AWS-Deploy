@@ -1,0 +1,26 @@
+{% extends "base_confirm_delete.html" %}
+
+{% block delete_message %}
+Are you sure you want to delete your account?
+{% endblock %}
+
+{% block delete_details %}
+<ul class="details-list">
+  <li><strong>Username:</strong> {{ object.username }}</li>
+  <li><strong>Name:</strong> {{ object.first_name }} {{ object.last_name }}</li>
+  <li><strong>Email:</strong> {{ object.email }}</li>
+  <li><strong>Role:</strong> {{ object.get_role_display }}</li>
+</ul>
+
+<p class="mt-14 text-danger">
+  This action is permanent and cannot be undone.
+</p>
+{% endblock %}
+
+{% block delete_button_text %}
+Yes, delete my account
+{% endblock %}
+
+{% block cancel_url %}
+{% url 'dashboard' %}
+{% endblock %}

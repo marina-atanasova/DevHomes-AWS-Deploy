@@ -154,7 +154,7 @@
 /* ----------------------------------------------------------
    Homepage button variants
    ---------------------------------------------------------- */
-.btn-light       { background: #e5e7eb; color: #111827; margin-top: 5px; }
+.btn-light       { background: #e5e7eb; color: #111827; margin-top: 0; }
 .btn-light:hover { background: #d1d5db; }
 
 .btn-accent       { background: #d4a11f; color: #111827; }
