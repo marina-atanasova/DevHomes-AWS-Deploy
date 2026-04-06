@@ -31,35 +31,6 @@ class CreditRequest(models.Model):
         return f"Credit request {self.created_at:%Y-%m-%d}"
 
 
-from django.conf import settings
-from django.db import models
-
-
-class CreditRequest(models.Model):
-    created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='credit_requests',
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    property_price = models.FloatField()
-    interest_rate = models.FloatField()
-    down_payment = models.IntegerField()
-    repayment_years = models.IntegerField()
-    linked_property = models.ForeignKey(
-        'Listings.Property',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='credit_requests'
-    )
-
-    def __str__(self):
-        return f"Credit request {self.created_at:%Y-%m-%d}"
-
-
 class EarlyRepaymentReport(models.Model):
     STATUS_PENDING = "pending"
     STATUS_PROCESSING = "processing"
