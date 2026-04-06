@@ -20,7 +20,7 @@ class PropertyForm(forms.ModelForm):
 
     class Meta:
         model = Property
-        fields = "__all__"
+        exclude = ["broker"]
         widgets = {
             "amenities": forms.CheckboxSelectMultiple(),
         }
@@ -32,7 +32,6 @@ class PropertyForm(forms.ModelForm):
         if self.instance and self.instance.pk:
             value = self.instance.price_per_sqm
             self.fields["price_per_sqm"].initial = value
-            self.fields["broker"].disabled = True
 
     def clean_build_year(self):
         year = self.cleaned_data.get("build_year")

@@ -50,5 +50,5 @@ class UserInquiry(models.Model):
 
 
     def __str__(self):
-        return f"Credit request {self.created_at:%Y-%m-%d}"
+        return f"User Inquiry {self.created_at:%Y-%m-%d}"
 

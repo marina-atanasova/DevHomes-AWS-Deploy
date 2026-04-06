@@ -133,15 +133,15 @@
             <div class="actions">
                 <a class="btn" href="{% url 'listings:detail' listing.pk %}">
                     View Details
-
+                </a>
                 <a class="btn" href="{% url 'listings:edit' listing.pk %}">
                         Edit Listing
                 </a>
-
                 <a class="btn btn-danger" href="{% url 'listings:delete' listing.pk %}">
                     Delete
                 </a>
             </div>
+
         </div>
     {% empty %}
         <div class="card">
