@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.password_validation import validate_password
@@ -59,6 +59,7 @@ def dashboard(request):
         "favorite_listings": user.favorite_properties.all(),
         "inquiries": user.inquiries.all(),
         "credit_requests": user.credit_requests.all(),
+        "early_repayment_reports": user.early_repayment_reports.all().order_by("-created_at"),
         "my_listings": user.broker_listings.all() if user.role == "broker" else [],
 
     }

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Early Repayment Report{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h1>Early Repayment Report #{{ report.pk }}</h1>
+
+  <p><strong>Status:</strong> {{ report.get_status_display }}</p>
+  <p><strong>Created:</strong> {{ report.created_at }}</p>
+
+  {% if report.status == "ready" %}
+    <hr class="divider">
+    <p><strong>Total saved:</strong> {{ report.total_paid_saved }}</p>
+    <p><strong>Interest saved:</strong> {{ report.interest_saved }}</p>
+    <p><strong>Extra costs saved:</strong> {{ report.extra_costs_saved }}</p>
+
+    <div class="row-end mt-14">
+      <a href="{% url 'CreditCalculator:credit_early_repayment_report_download' report.pk %}" class="btn btn-primary">
+        Download PDF
+      </a>
+    </div>
+  {% elif report.status == "failed" %}
+    <hr class="divider">
+    <p class="text-danger"><strong>Error:</strong> {{ report.error_message }}</p>
+  {% else %}
+    <p>Your report is being processed. Refresh this page in a few seconds.</p>
+  {% endif %}
+</div>
+{% endblock %}

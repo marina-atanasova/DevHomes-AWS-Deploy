@@ -32,10 +32,18 @@
 
 {% if original and early %}
 
-<a class="btn btn-accent" href="{% url 'CreditCalculator:credit_early_repayment_report_pdf' %}?{{ request.GET.urlencode }}">
-        Download PDF Report
-      </a>
+<form method="post" action="{% url 'CreditCalculator:credit_early_repayment_report_request' %}">
+    {% csrf_token %}
 
+    <!-- preserve inputs -->
+    {% for key, value in request.GET.items %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+    {% endfor %}
+
+    <button type="submit" class="btn btn-accent">
+        Generate PDF Report
+    </button>
+</form>
   <div class="results-highlight-grid">
     <div class="card highlight-card">
       <h2>Total Money Saved</h2>
@@ -99,9 +107,18 @@
     </p>
   </div>
     <div class="card">
-      <a class="btn btn-accent" href="{% url 'CreditCalculator:credit_early_repayment_report_pdf' %}?{{ request.GET.urlencode }}">
-        Download PDF Report
-      </a>
+      <form method="post" action="{% url 'CreditCalculator:credit_early_repayment_report_request' %}">
+    {% csrf_token %}
+
+    <!-- preserve inputs -->
+    {% for key, value in request.GET.items %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+    {% endfor %}
+
+    <button type="submit" class="btn btn-accent">
+        Generate PDF Report
+    </button>
+</form>
     </div>
 {% endif %}
 

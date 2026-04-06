@@ -72,9 +72,11 @@ class Property(models.Model):
     @property
     def price_per_sqm(self):
         try:
+            price = Decimal(str(self.price))
+            size = Decimal(str(self.size))
             if self.size <= 0:
                 return None
-            return (self.price / self.size).quantize(
+            return (price / size).quantize(
                 Decimal("0.01"),
                 rounding=ROUND_HALF_UP,
             )

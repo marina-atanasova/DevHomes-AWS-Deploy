@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.db import transaction
+from django.http import HttpResponse, Http404, FileResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -9,9 +10,9 @@ from django.views import generic
 
 from CreditCalculator.calculations import calculate_early_repayment_comparison
 from CreditCalculator.forms import CreditCalculator, calculator, EarlyRepaymentCalculatorForm
-from CreditCalculator.models import CreditRequest
 from CreditCalculator.pdf_reports import build_early_repayment_pdf
-
+from CreditCalculator.models import CreditRequest, EarlyRepaymentReport
+from CreditCalculator.tasks import generate_early_repayment_report
 
 # Create your views here.
 
@@ -122,3 +123,64 @@ def early_repayment_report_pdf_view(request):
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = f'attachment; filename="{filename}"'
     return response
+
+@login_required
+def early_repayment_report_request_view(request):
+    form = EarlyRepaymentCalculatorForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        report = EarlyRepaymentReport.objects.create(
+            created_by=request.user,
+            current_principal=form.cleaned_data["current_principal"],
+            yearly_interest_rate=form.cleaned_data["yearly_interest_rate"],
+            years_left=form.cleaned_data["years_left"],
+            monthly_payment=form.cleaned_data["monthly_payment"],
+            early_monthly_payment=form.cleaned_data["early_monthly_payment"],
+            life_insurance_monthly=form.cleaned_data.get("life_insurance_monthly"),
+            property_insurance_yearly=form.cleaned_data.get("property_insurance_yearly"),
+            bank_fee_rate_yearly=form.cleaned_data.get("bank_fee_rate_yearly"),
+            status=EarlyRepaymentReport.STATUS_PENDING,
+        )
+
+        transaction.on_commit(
+            lambda: generate_early_repayment_report.delay(report.pk)
+        )
+
+        return redirect("CreditCalculator:credit_early_repayment_report_detail", pk=report.pk)
+
+    return render(
+        request,
+        "CreditCalculator/early_repayment_report_request.html",
+        {"form": form},
+    )
+
+
+@login_required
+def early_repayment_report_detail_view(request, pk):
+    report = get_object_or_404(EarlyRepaymentReport, pk=pk)
+
+    if report.created_by != request.user and not request.user.is_superuser:
+        raise Http404()
+
+    return render(
+        request,
+        "CreditCalculator/early_repayment_report_detail.html",
+        {"report": report},
+    )
+
+
+@login_required
+def early_repayment_report_download_view(request, pk):
+    report = get_object_or_404(EarlyRepaymentReport, pk=pk)
+
+    if report.created_by != request.user and not request.user.is_superuser:
+        raise Http404()
+
+    if report.status != EarlyRepaymentReport.STATUS_READY or not report.pdf_file:
+        return HttpResponse("Report is not ready yet.", status=400)
+
+    return FileResponse(
+        report.pdf_file.open("rb"),
+        as_attachment=True,
+        filename=report.pdf_file.name.split("/")[-1],
+    )

@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.test import TestCase
 
 from Listings.models import Property
@@ -32,14 +34,13 @@ class ListingTests(TestCase):
         self.assertIsNotNone(listing.pk)
         self.assertEqual(listing.amenities.count(), 0)
 
-    def test_price_per_sqm_calculation_is_valid(self):
-        listing = create_property(price=100000, size=100)
+    def test_price_per_sqm_with_valid_data(self):
+        listing = create_property(price=100000, size=10)
+        self.assertEqual(listing.price_per_sqm, Decimal("10000.00"))
 
-        self.assertEqual(float(listing.price_per_sqm), 1000.00)
 
     def test_price_per_sqm_with_zero_size_returns_none(self):
         listing = create_property(price=100000, size=0)
-
         self.assertIsNone(listing.price_per_sqm)
 
     def test_property_str(self):
