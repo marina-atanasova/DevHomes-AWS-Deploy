@@ -94,9 +94,13 @@ class EditListingView(UpdateView):
 
         if request.user.is_superuser or listing.broker == request.user:
             return super().dispatch(request, *args, **kwargs)
+        raise PermissionDenied("You are not allowed to edit this listing")
 
         messages.error(request, "You do not have permission to edit this listing.")
-        return redirect("listings")
+        return redirect("listings:all")
+    def form_valid(self, form):
+        form.instance.broker = self.request.user
+        return super().form_valid(form)
 
 
 @method_decorator(allowed_groups(["Broker"]), name="dispatch")
@@ -116,7 +120,7 @@ class DeleteListingView(DeleteView):
         if request.user.is_superuser or listing.broker == request.user:
             return super().dispatch(request, *args, **kwargs)
 
-        raise PermissionDenied
+        raise PermissionDenied('You are not allowed to delete this listing')
 
 
 class AmenityListView(ListView):

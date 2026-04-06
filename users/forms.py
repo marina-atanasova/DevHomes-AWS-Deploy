@@ -18,7 +18,6 @@ class UserRegisterForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-
         user.role = self.cleaned_data["role"]
 
 
@@ -29,13 +28,10 @@ class UserRegisterForm(UserCreationForm):
 
         if commit:
             user.save()
-
             group_name = user.get_role_display()  # "Broker" or "Customer"
             group, created = Group.objects.get_or_create(name=group_name)
-
             user.groups.clear()
             user.groups.add(group)
-
         return user
 
 class SimplePasswordResetForm(forms.Form):
