@@ -83,7 +83,7 @@
 
       <!-- Size -->
       <div>
-        <label for="{{ form.size.id_for_label }}">{{ form.size.label }}</label>
+        <label for="{{ form.size.id_for_label }}">Size (sq. m)</label>
         {{ form.size }}
         {{ form.size.errors }}
       </div>
@@ -91,7 +91,7 @@
       <!-- Price -->
       <div>
         <label for="{{ form.price.id_for_label }}">
-          {{ form.price.label }} <span class="required">*</span>
+          Price (EUR) <span class="required">*</span>
         </label>
         {{ form.price }}
         {{ form.price.errors }}
@@ -100,7 +100,7 @@
       <!-- Price per sqm -->
       {% if form.price_per_sqm %}
       <div>
-        <label for="{{ form.price_per_sqm.id_for_label }}">{{ form.price_per_sqm.label }}</label>
+        <label for="{{ form.price_per_sqm.id_for_label }}">{{ form.price_per_sqm.label }} (EUR)</label>
         {{ form.price_per_sqm }}
       </div>
       {% endif %}
@@ -120,7 +120,7 @@
 
       <!-- Rooms -->
       <div>
-        <label for="{{ form.rooms.id_for_label }}">{{ form.rooms.label }}</label>
+        <label for="{{ form.rooms.id_for_label }}">Rooms (total)</label>
         {{ form.rooms }}
       </div>
 

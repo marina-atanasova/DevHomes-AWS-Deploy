@@ -107,16 +107,19 @@
 
       <!-- Size -->
       <div>
-        <label for="{{ form.size.id_for_label }}">{{ form.size.label }}</label>
+        <label for="{{ form.size.id_for_label }}">Size (sq. m)</label>
         {{ form.size }}
         {{ form.size.errors }}
       </div>
 
       <!-- Price -->
       <div>
-        <label for="{{ form.price.id_for_label }}">{{ form.price.label }}</label>
+        <label for="{{ form.price.id_for_label }}">{{ form.price.label }} (EUR)</label>
         {{ form.price }}
         {{ form.price.errors }}
+          {% if object.price_per_sqm %}
+            <p><strong>Price / m²:</strong> {{ object.price_per_sqm|floatformat:2 }} EUR/m²</p>
+          {% endif %}
       </div>
 
 
@@ -129,7 +132,7 @@
 
       <!-- Rooms -->
       <div>
-        <label for="{{ form.rooms.id_for_label }}">{{ form.rooms.label }}</label>
+        <label for="{{ form.rooms.id_for_label }}">{{ form.rooms.label }} (total)</label>
         {{ form.rooms }}
       </div>
 

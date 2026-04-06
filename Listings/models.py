@@ -1,4 +1,4 @@
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
 from random import choices
 
 from django.conf import settings
@@ -71,12 +71,14 @@ class Property(models.Model):
 
     @property
     def price_per_sqm(self):
-        if not self.size or not self.price:
-            return None
         try:
-            value = self.price / Decimal(self.size)
-            return value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        except (ZeroDivisionError, TypeError):
+            if self.size <= 0:
+                return None
+            return (self.price / self.size).quantize(
+                Decimal("0.01"),
+                rounding=ROUND_HALF_UP,
+            )
+        except (AttributeError, TypeError, ZeroDivisionError, InvalidOperation):
             return None
 
     def __str__(self):

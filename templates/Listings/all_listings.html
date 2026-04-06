@@ -16,8 +16,8 @@
         <p><strong>District:</strong> {{ p.district }}</p>
           <p><strong>Price:</strong> {{ p.price }} </p>
             {% if p.price_per_sqm %}
-                <p><strong>Price / m²:</strong> {{ p.price_per_sqm|floatformat:2 }} EUR/m²</p>
-            {% endif %}
+            <p><strong>Price / m²:</strong> {{ p.price_per_sqm|floatformat:2 }} EUR/m²</p>
+          {% endif %}
             <p><strong>ID:</strong> {{ p.pk }}</p>
 
           <p><strong>Rooms:</strong> {{ p.rooms }} | <strong>Bedrooms:</strong> {{ p.bedrooms }}</p>
