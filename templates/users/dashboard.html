@@ -32,8 +32,11 @@
 <h2>Favorite Listings ({{ favorite_listings.count }})</h2>
 {% for listing in favorite_listings %}
     <div class="card">
-        <h3>{{ listing.name }}</h3>
-        <p>{{ listing.address }}</p>
+        <h3><strong>Name: </strong>{{ listing.name }}</h3>
+        <p><strong>Address: </strong>{{ listing.address }}</p>
+        <p><strong>City: </strong>{{ listing.city }}</p>
+        <p><strong>District: </strong>{{ listing.district }}</p>
+        <p><strong>Price: </strong>{{ listing.price }} EUR</p>
 
         <div class="actions">
             <a class="btn " href="{% url 'listings:detail' listing.pk %}">
@@ -122,14 +125,41 @@
     </div>
 {% endfor %}
 
+<hr>
+
+<h2>Early Repayment Reports ({{ early_repayment_reports.count }})</h2>
+{% for report in early_repayment_reports %}
+    <div class="card">
+        <h3>Early Repayment Report</h3>
+        <p><strong>Created on:</strong> {{ report.created_at }}</p>
+        <p><strong>Status:</strong> {{ report.get_status_display }}</p>
+
+        <div class="actions">
+            <a class="btn" href="{% url 'CreditCalculator:credit_early_repayment_report_detail' report.pk %}">
+                View Status
+            </a>
+
+            {% if report.status == "ready" %}
+                <a class="btn btn-accent" href="{% url 'CreditCalculator:credit_early_repayment_report_download' report.pk %}">
+                    Download PDF
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% empty %}
+    <div class="card">
+        <p>No early repayment reports yet.</p>
+    </div>
+{% endfor %}
+
 {% if user.role == "broker" %}
     <hr>
 
     <h2>My Listings ({{ my_listings.count }})</h2>
     {% for listing in my_listings %}
         <div class="card">
-            <h3>{{ listing.name }}</h3>
-            <p>{{ listing.address }}</p>
+            <h3><strong>Name: </strong>{{ listing.name }}</h3>
+            <p><strong>Address: </strong>{{ listing.address }}</p>
 
             <div class="actions">
                 <a class="btn" href="{% url 'listings:detail' listing.pk %}">

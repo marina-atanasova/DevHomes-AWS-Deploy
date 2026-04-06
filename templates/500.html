@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error | DevHomes{% endblock %}
+
+{% block content %}
+<div class="card" style="text-align:center; padding:60px 20px;">
+
+  <h1 style="font-size:48px; margin-bottom:10px;">500</h1>
+  <h2>Something went wrong</h2>
+
+  <p class="mt-14">
+    We're sorry — something unexpected happened.
+    Please try again later.
+  </p>
+
+  <div class="mt-18">
+    <a href="{% url 'home' %}" class="btn">Go to Homepage</a>
+  </div>
+
+</div>
+{% endblock %}
